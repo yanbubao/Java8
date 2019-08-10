@@ -5,7 +5,7 @@ package com.learn.base;
  * @date: 2019/08/04 17:20
  */
 @FunctionalInterface
-public interface MyInterface {
+public interface IBase {
 
     /**
      * zz
@@ -18,5 +18,12 @@ public interface MyInterface {
      */
     @Override
     String toString();
+
+    /**
+     * default method
+     */
+    default void defaultMethod(){
+        System.out.println("zz");
+    }
 
 }

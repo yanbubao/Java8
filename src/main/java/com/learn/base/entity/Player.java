@@ -20,4 +20,8 @@ public class Player implements Serializable {
     public Player() {
         this.name = "default";
     }
+
+    public Integer compareByAge(Player player){
+        return this.age - player.getAge();
+    }
 }

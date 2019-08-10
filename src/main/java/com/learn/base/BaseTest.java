@@ -1,6 +1,7 @@
 package com.learn.base;
 
 import com.learn.base.entity.Player;
+import com.learn.base.entity.SubClass;
 import com.learn.base.entity.Team;
 import org.junit.Test;
 
@@ -107,11 +108,43 @@ public class BaseTest {
     }
 
     @Test
-    public void optionalTest02(){
+    public void optionalTest02() {
         Optional<Team> lal = Optional.ofNullable(LAL);
         //lal.ifPresent(team -> System.out.println(team.getPlayers()));
 
         List<Player> players = lal.map(Team::getPlayers).orElseGet(Collections::emptyList);
         System.out.println(players);
+    }
+
+    /**
+     * 注意:
+     * 类::实例方法，实例方法一定被一个对象所调用！
+     * <p>
+     * default void sort(Comparator<? super E> c) {...}
+     * Comparator -> int compare(T o1, T o2);
+     * <p>
+     * sort方法要求传入带有两个参数的lambda，但我们的方法引用指向的函数只有一个参数 ？？
+     * 因为调用::后面compareByAge的对象为lambda的第一个参数（p1），
+     * 如果lambda中有多个参数，那么后面的参数(p2 p3 p4)为 xx.compareByAge(yy) 中的参数yy
+     */
+
+    @Test
+    public void methodReference() {
+        Player p1 = new Player("a", 25);
+        Player p2 = new Player("b", 24);
+        Player p3 = new Player("b", 26);
+
+        List<Player> players = Arrays.asList(p1, p2, p3);
+
+        players.sort(Player::compareByAge);
+        players.forEach(System.out::println);
+        System.out.println("******************************************");
+
+    }
+
+    @Test
+    public void defaultMethod(){
+        SubClass subClass = new SubClass();
+        subClass.defaultMethod();
     }
 }

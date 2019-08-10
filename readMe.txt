@@ -5,6 +5,17 @@ Java8新特性笔记
 一、lambda:用于表示匿名函数或闭包的一种运算符。
 *** 传递行为，而不仅仅是值！
 
+方法引用：实际上是lambda表达式的一种语法糖！method reference
+
+可以将方法引用看成一个函数指针，方法引用共分为四类：
+01.类::静态方法
+02.对象引用::实例方法
+02.类::实例方法
+03.类::构造方法
+
+使用方法引用这块语法糖的场景：
+你的lambda中只有一行，且这一行代码恰好存在已有的代替者，那么就可以嚼这块糖啦！
+
 
 二、函数式接口：java.lang.FunctionalInterface
 条件：
@@ -22,18 +33,29 @@ Java8新特性笔记
 java.util.function.* 下为Java8提供的所有函数式接口，BiFunction: Bidirectional（双向的)等等！
 
 
-三、stream
-基本概念：
-两组纬度，串行流和并行流、中间流和节点流。、
-流要操作的数据，数据源source
-
-
-
-
-四、java.util.Optional<T>
+三、java.util.Optional<T>
 
 Optional是一个容器对象，可能包含null！
 
-推荐使用Optional.ifPresent进行函数式编写程序，避免编写 if(null == xx) else ..
+推荐使用Optional.ifPresent进行函数式编写程序，避免编写 if(null == xx) else .. 避免NPE的优雅写法...
 
 注意：Optional没有实现序列化接口！因此不要用Optional最为成员变量或函数参数，一般只作为函数返回值使用！
+
+
+四、stream
+基本概念：
+两组纬度，串行流和并行流、中间流和节点流。
+流本质时函数式的，对流的操作会产生一个新的结果，并不会改变修改底层的数据源！
+
+流由三部分构成：源、0个或多个中间操作、终止操作！
+
+流操作分为：
+惰性求值lazy：只在终止操作时流被初始化！
+及早求值：stream.xx.yy.count()
+
+
+
+
+
+
+
