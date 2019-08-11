@@ -15,7 +15,7 @@ import java.util.stream.Stream;
  */
 public class StreamTest {
 
-    private Stream<String> stream = Stream.of("kobe", "james", "kd");
+    private Stream<String> stream = Stream.of("kobe", "james", "kd", "curry");
 
     @Test
     public void test() {
@@ -156,9 +156,61 @@ public class StreamTest {
      */
     @Test
     public void test13() {
-        // error
-        //IntStream.iterate(0, i -> (i + 1) % 2).distinct().limit(6).forEach(System.out::println);
+        // error. IntStream.iterate(0, i -> (i + 1) % 2).distinct().limit(6).forEach(System.out::println);
 
         IntStream.iterate(0, i -> (i + 1) % 2).limit(6).distinct().forEach(System.out::println);
     }
+
+    /**
+     * eg .
+     * 内部迭代是将源数据转换为流（不严谨的化可以说把源数据丢在流中），流会现将我们编写的处理逻辑（也就是中间操作们）先存储起来，
+     * 等出发最终操作时一并执行中间操作！而且最终操作是流内部也会对中间操作进行优化，如可以并行化处理！
+     */
+    @Test
+    public void test14() {
+        // stream = Stream.of("kobe", "james", "kd", "curry")；
+        stream.filter(temp -> {
+            System.out.println(temp);
+            return temp.length() == 5;
+
+        }).findFirst().ifPresent((temp) -> System.out.println("看174行输出啥！"));
+    }
+
+    /**
+     * eg . 单词去重
+     */
+    @Test
+    public void test15() {
+        Stream<String> stream = Stream.of("apple banana", "orange apple", "melon banana");
+
+        stream.map(str -> str.split(" ")).flatMap(Arrays::stream).distinct().forEach(System.out::println);
+    }
+
+    /**
+     * eg . 交叉组合
+     */
+    @Test
+    public void test16() {
+        List<String> list1 = Arrays.asList("hi", "hello", "你好");
+        List<String> list2 = Arrays.asList("kobe", "james", "jordan");
+
+
+        /*Stream<List<String>> stream = Stream.of(list1);
+        Stream<String> stream2 = list1.stream();*/
+
+        /**
+         * 疑问：list1.stream()不已经是打平的流了吗？为啥还需要flatMap？
+         */
+
+        list1.stream().flatMap(item -> list2.stream().map(item2 -> item + ":" + item2))
+                .collect(Collectors.toList()).forEach(System.out::println);
+
+
+        Stream.of(list1).flatMap(List::stream).flatMap(item -> list2.stream().map(item2 -> item + ":" + item2))
+                .collect(Collectors.toList()).forEach(System.out::println);
+    }
+
+
+    //p21 12 50
+
 }
