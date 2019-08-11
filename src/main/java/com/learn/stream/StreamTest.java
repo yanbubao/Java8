@@ -199,7 +199,10 @@ public class StreamTest {
         Stream<String> stream2 = list1.stream();*/
 
         /**
-         * 疑问：list1.stream()不已经是打平的流了吗？为啥还需要flatMap？
+         * 疑问：list1.stream()不已经是打平的流了吗？为啥还需要flatMap ？
+         *
+         * ...
+         * 之前对flatMap理解的不透彻！已想通！
          */
 
         list1.stream().flatMap(item -> list2.stream().map(item2 -> item + ":" + item2))
