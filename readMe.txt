@@ -77,7 +77,29 @@ list.stream().filter(a).map.(b).filter(c).foreach(sout);
 上述伪代码中不是循环执行a，再操作b，再循环执行c！而是最终出发foreach最终操作时只循环一次并执行所有中间操作！
 
 
+五、Collector
 
+01.Collector接口作为stream.collect(Collector)方法的参数
+
+JavaDoc中描述到Collector：
+是一个可变的汇聚操作，它会将输入元素放置到一个可变的结果容器中！
+当所有的输入元素都处理完毕之后，将所有操作累积之后的结果转换到一个最终的表示！（这是个可选操作！）
+并且支持串行和并行两种执行方式！
+
+并行不一定比串行效率高哦，例如4个线程在双核CPU上运行，会耗费线程切换的时间！
+
+Collector接口中包含了四个函数：
+
+Supplier Collector#supplier     供应者：创建并返回一个新的结果容器！
+
+BiConsumer Collector#accumulator  累加器：将新的数据元素（流中元素）合并到结果容器！supplier所创建的结果容器！
+
+BinaryOperator Collector#combiner     组合器：将两个结果容器合并为一个！ 与并发相关！
+
+Function Collector#finisher     将中间累积类型转换为最终结果类型！
+
+
+02.Collectors类提供了关于Collector的常见汇聚实现！Collectors本身是一个工厂！
 
 
 

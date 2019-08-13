@@ -1,13 +1,15 @@
 package com.learn.stream;
 
+import com.learn.stream.entity.Student;
 import org.junit.Assert;
 import org.junit.Test;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.*;
 
 /**
  * @author: yanzx
@@ -25,7 +27,7 @@ public class StreamTest {
 
     @Test
     public void test2() {
-        List<String> list = stream.collect(Collectors.toList());
+        List<String> list = stream.collect(toList());
 
         list.forEach(System.out::println);
     }
@@ -57,14 +59,14 @@ public class StreamTest {
      */
     @Test
     public void test4() {
-        LinkedList<String> linkedList = stream.collect(Collectors.toCollection(LinkedList::new));
+        LinkedList<String> linkedList = stream.collect(toCollection(LinkedList::new));
 
         linkedList.forEach(System.out::println);
     }
 
     @Test
     public void test5() {
-        TreeSet<String> treeSet = stream.collect(Collectors.toCollection(TreeSet::new));
+        TreeSet<String> treeSet = stream.collect(toCollection(TreeSet::new));
 
         System.out.println(treeSet.getClass());
         treeSet.forEach(System.out::println);
@@ -77,13 +79,13 @@ public class StreamTest {
     public void test6() {
         StringBuilder builder = stream.collect(StringBuilder::new, StringBuilder::append, StringBuilder::append);
         // or
-        System.out.println(stream.collect(Collectors.joining()));
+        System.out.println(stream.collect(joining()));
     }
 
     @Test
     public void test7() {
 
-        stream.map(String::toUpperCase).collect(Collectors.toList()).forEach(System.out::println);
+        stream.map(String::toUpperCase).collect(toList()).forEach(System.out::println);
     }
 
 
@@ -110,7 +112,7 @@ public class StreamTest {
 
         Stream<? extends Serializable> stream = Stream.concat(integerStream, stringStream);
 
-        stream.collect(Collectors.toList()).forEach(temp -> System.out.println(temp.getClass()));
+        stream.collect(toList()).forEach(temp -> System.out.println(temp.getClass()));
     }
 
     /**
@@ -206,14 +208,45 @@ public class StreamTest {
          */
 
         list1.stream().flatMap(item -> list2.stream().map(item2 -> item + ":" + item2))
-                .collect(Collectors.toList()).forEach(System.out::println);
+                .collect(toList()).forEach(System.out::println);
 
 
         Stream.of(list1).flatMap(List::stream).flatMap(item -> list2.stream().map(item2 -> item + ":" + item2))
-                .collect(Collectors.toList()).forEach(System.out::println);
+                .collect(toList()).forEach(System.out::println);
     }
 
 
-    //p21 12 50
+    /**
+     * data
+     */
+    private Student s1 = new Student("张三", 95);
+    private Student s2 = new Student("李四", 93);
+    private Student s3 = new Student("张三", 81);
+    private Student s4 = new Student("赵六", 69);
+    private List<Student> students = Arrays.asList(s1, s2, s3, s4);
 
+    /**
+     * 分组. group by
+     */
+    @Test
+    public void test17() {
+
+
+        Map<String, Double> map = students.stream()
+                .collect(groupingBy(Student::getName, averagingDouble(Student::getScore)));
+
+        System.out.println(map);
+    }
+
+    /**
+     * 分区. partition by. 结果只有两种 boolean
+     */
+    @Test
+    public void test18() {
+
+        Map<Boolean, List<Student>> map =
+                students.stream().collect(partitioningBy(student -> student.getScore() > 90));
+
+        map.get(true).forEach(System.out::println);
+    }
 }
