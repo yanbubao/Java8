@@ -231,7 +231,6 @@ public class StreamTest {
     @Test
     public void test17() {
 
-
         Map<String, Double> map = students.stream()
                 .collect(groupingBy(Student::getName, averagingDouble(Student::getScore)));
 
@@ -249,4 +248,12 @@ public class StreamTest {
 
         map.get(true).forEach(System.out::println);
     }
+
+
+    @Test
+    public void test19(){
+
+    }
+
+
 }
